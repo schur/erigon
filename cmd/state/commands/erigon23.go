@@ -41,6 +41,10 @@ import (
 	"github.com/ledgerwatch/erigon/turbo/snapshotsync"
 )
 
+const (
+	AggregationStep = 3_125_000 /* number of transactions in smallest static file */
+)
+
 func init() {
 	withBlock(erigon23Cmd)
 	withDataDir(erigon23Cmd)
@@ -287,7 +291,7 @@ func (s *stat23) delta(aStats libstate.FilesStats, blockNum uint64) *stat23 {
 }
 
 func processBlock23(startTxNum uint64, trace bool, txNumStart uint64, rw *ReaderWrapper23, ww *WriterWrapper23, chainConfig *params.ChainConfig,
-	 engine consensus.Engine, getHeader func(hash common.Hash, number uint64) *types.Header, block *types.Block, vmConfig vm.Config,
+	engine consensus.Engine, getHeader func(hash common.Hash, number uint64) *types.Header, block *types.Block, vmConfig vm.Config,
 ) (uint64, types.Receipts, error) {
 	defer blockExecutionTimer.UpdateDuration(time.Now())
 
